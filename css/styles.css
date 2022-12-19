@@ -1,0 +1,73 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    background-color: rgb(248, 248, 248);
+}
+
+#tic-tac-toe {
+    width: min(640px, 100%);
+    margin: 2rem auto;
+    padding: .75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    background-color: rgb(209, 209, 209);
+    border: 5px solid rgb(98, 99, 115);
+    border-radius: 1em;
+}
+
+#title {
+    font-size: 3rem;
+    text-align: center;
+}
+
+#gameplay p {
+    line-height: 1.35;
+}
+
+#game-grid {
+    width: 480px;
+    height: 480px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:.25em;
+    background-color: rgb(170,170,50);
+    border: 7px solid rgb(170,170,50);
+    border-radius: .5em;
+}
+
+.game-square {
+    min-height: 148px;
+    display: flex;
+    font-size: 5rem;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(136, 136, 136);
+    cursor: pointer;
+}
+
+#buttons {
+    display: flex;
+    padding: 1rem 0;
+}
+
+.button {
+    border: none;
+    font-size: 1.5rem;
+    padding: .5rem 1rem;
+    color:rgb(248, 248, 248);
+    background-color: rgb(98, 99, 115);
+    cursor: pointer;
+}
+
+.no-click {
+    cursor: auto;
+    pointer-events: none;
+}
