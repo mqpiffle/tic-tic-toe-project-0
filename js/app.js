@@ -36,10 +36,12 @@ const robotPlayer = {
 }
 console.log(robotPlayer)
 // game board array
-let turn = 0
+let turn = 1
+// global who is the current player?
 let currentPlayer
 // console.log(currentPlayer)
 const availableSquares= []
+// all possible win conditions
 const winConditions = [
     [0, 1, 2],
     [3, 4, 5],
@@ -50,6 +52,7 @@ const winConditions = [
     [0, 4, 8],
     [2, 4, 6]
 ]
+// check if a player won the game
 let didSomebodyWin = false
 //////////////////////////////////////////////////////////
 //!Game Logic
@@ -60,7 +63,7 @@ const gameStart = () => {
     initializeGame()
 }
 
-const startButton = (remove) => {
+const startButton = () => {
     const messages = document.getElementById('buttons-display')
     const startButton = document.createElement('button')
     startButton.className = 'button'
@@ -91,7 +94,6 @@ const checkForWin = (player) => {
         }
     }
     if (!didSomebodyWin) {
-        advanceTurn()
         if (player === humanPlayer) {
             currentPlayer === robotPlayer
             robotSquareChoice()
@@ -129,6 +131,8 @@ const squareClickHandler = (event) => {
 }
 
 const humanSquareChoice = () => {
+
+    advanceTurn()
     // console.log(`current player is ${currentPlayer.name}`)
     //listen for click event on empty square (returns array - node list)
     const gameSquare = document.querySelectorAll('.game-square')
@@ -168,7 +172,6 @@ const chooseFirstPlayer = () => {
         currentPlayer = robotPlayer
         robotSquareChoice()
     }
-    advanceTurn()
 }
 
 const forfeitGame = () => {
