@@ -16,6 +16,8 @@ console.log('js init')
 // Detect winner: Stop game and declare the winner if one player ends up getting three in a row.
 // Hint: Determine a set of winning combinations. Check those combinations on the board contents after every move.
 
+///////////////////////////////////////////////////////
+//!Global Varibales
 // game on?
 let gameOn = false
 // setup players
@@ -49,17 +51,32 @@ const winConditions = [
     [2, 4, 6]
 ]
 let didSomebodyWin = false
+//////////////////////////////////////////////////////////
+//!Game Logic
+
 const gameStart = () => {
     console.log('Game Started')
     gameOn = true
-    console.log(gameOn)
     initializeGame()
 }
 
+const startButton = (remove) => {
+    const messages = document.getElementById('buttons-display')
+    const startButton = document.createElement('button')
+    startButton.className = 'button'
+    startButton.id = 'start-button'
+    startButton.innerText = 'Start New Game'
+    messages.appendChild(startButton)
+    startButton.addEventListener('click', gameStart)
+    //add false as argument to remove the button
+}
 
-//listen to start game
-const startButton = document.getElementById('start-button')
-startButton.addEventListener('click', gameStart)
+startButton()
+
+const advanceTurn = () => {
+    const messages = document.getElementById('messages')
+    messages.innerText = `TURN: ${turn += 1}`
+}
 
 const declareWinner = () => {
     const messages = document.getElementById('messages')
@@ -74,6 +91,7 @@ const checkForWin = (player) => {
         }
     }
     if (!didSomebodyWin) {
+        advanceTurn()
         if (player === humanPlayer) {
             currentPlayer === robotPlayer
             robotSquareChoice()
@@ -108,9 +126,6 @@ const squareClickHandler = (event) => {
     // console.log(`player's chosen squares are ${humanPlayer.squaresChosen} and the type is ${typeof humanPlayer.squaresChosen[0]}`)
     console.log(humanPlayer)
     checkForWin(humanPlayer)
-   
-    // currentPlayer = robotPlayer
-    // robotSquareChoice()
 }
 
 const humanSquareChoice = () => {
@@ -153,6 +168,15 @@ const chooseFirstPlayer = () => {
         currentPlayer = robotPlayer
         robotSquareChoice()
     }
+    advanceTurn()
+}
+
+const forfeitGame = () => {
+    const startButton = document.getElementById('buttons-display')
+    startButton.createElement('button')
+    startButton.className = 'button'
+    startButton.id = 'start-button'
+    startButton.addEventListener('click', gameStart)
 }
 
 const createGameBoard = () => {
@@ -174,13 +198,8 @@ const createGameBoard = () => {
 }
 
 const initializeGame = () => {
-    startButton.remove()
+    const element =  document.getElementById('start-button')
+    element.remove()
     createGameBoard()
     chooseFirstPlayer()
 }
-
-//TODO:
-//draw conditions
-//display messages (whose turn, win loss, etc)
-//add a 'reset' button
-
