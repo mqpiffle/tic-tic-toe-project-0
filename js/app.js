@@ -28,6 +28,7 @@ const humanPlayer = {
     score: 0
 }
 console.log(humanPlayer)
+
 const robotPlayer = {
     name: 'mr roboto',
     gamePiece: 'O',
@@ -36,11 +37,11 @@ const robotPlayer = {
 }
 console.log(robotPlayer)
 // game board array
-let turn = 1
+let turn = 0
 // global who is the current player?
 let currentPlayer
 // console.log(currentPlayer)
-const availableSquares= []
+let availableSquares= []
 // all possible win conditions
 const winConditions = [
     [0, 1, 2],
@@ -50,10 +51,11 @@ const winConditions = [
     [1, 4, 7],
     [2, 5, 8],
     [0, 4, 8],
-    [2, 4, 6]
+    [2, 4, 6] 
 ]
 // check if a player won the game
 let didSomebodyWin = false
+let draw = false
 //////////////////////////////////////////////////////////
 //!Game Logic
 
@@ -64,41 +66,90 @@ const gameStart = () => {
 }
 
 const startButton = () => {
-    const messages = document.getElementById('buttons-display')
+    const buttonDisplay = document.getElementById('buttons-display')
     const startButton = document.createElement('button')
     startButton.className = 'button'
     startButton.id = 'start-button'
     startButton.innerText = 'Start New Game'
-    messages.appendChild(startButton)
+    buttonDisplay.appendChild(startButton)
     startButton.addEventListener('click', gameStart)
-    //add false as argument to remove the button
+    const messages = document.getElementById('messages')
+    messages.innerText = ''
 }
 
 startButton()
+
+stageGame = () => {
+    for (i = 0; i < 9; i++) {
+        const square = document.getElementById(i)
+        square.remove()
+    }
+    gameOn = false
+    didSomebodyWin = false
+    draw = false
+    turn = 0
+    humanPlayer.squaresChosen = []
+    robotPlayer.squaresChosen = []
+    availableSquares = []
+    const element =  document.getElementById('continue-button')
+    element.remove()
+    startButton()
+}
 
 const advanceTurn = () => {
     const messages = document.getElementById('messages')
     messages.innerText = `TURN: ${turn += 1}`
 }
 
-const declareWinner = () => {
+const continueButton = () => {
+    const element =  document.getElementById('forfeit-button')
+    element.remove()
+    const buttonDisplay = document.getElementById('buttons-display')
+    const continueButton = document.createElement('button')
+    continueButton.className = 'button'
+    continueButton.id = 'continue-button'
+    continueButton.innerText = 'Continue...'
+    buttonDisplay.appendChild(continueButton)
+    continueButton.addEventListener('click', stageGame)
+}
+
+const battleDraw = () => {
     const messages = document.getElementById('messages')
-    messages.innerText = 'WINNER!!'
+    messages.innerText = `It's a DRAW!!`
+    continueButton()
+}
+
+const battleWinner = () => {
+    currentPlayer.score++
+    const messages = document.getElementById('messages')
+    messages.innerText = `${currentPlayer.name} is the WINNER!!`
+    continueButton()
+}
+
+const lockBoard = () => {
+    const gameGrid = document.getElementById('game-grid')
+    gameGrid.className = 'no-click'
 }
 
 const checkForWin = (player) => {
     for (const entry of winConditions) {
         if (entry.every(element => player.squaresChosen.includes(element)) === true) {
             didSomebodyWin = true
-            declareWinner()
+            lockBoard()
+            battleWinner()
         }
     }
-    if (!didSomebodyWin) {
+    if (turn === 10 && !didSomebodyWin) {
+        lockBoard()
+        battleDraw()
+    } else if (turn < 10 && !didSomebodyWin) {
         if (player === humanPlayer) {
-            currentPlayer === robotPlayer
+            advanceTurn()
+            currentPlayer = robotPlayer
             robotSquareChoice()
         } else {
-            currentPlayer === humanPlayer
+            advanceTurn()
+            currentPlayer = humanPlayer
             humanSquareChoice()
         }
     }
@@ -131,8 +182,6 @@ const squareClickHandler = (event) => {
 }
 
 const humanSquareChoice = () => {
-
-    advanceTurn()
     // console.log(`current player is ${currentPlayer.name}`)
     //listen for click event on empty square (returns array - node list)
     const gameSquare = document.querySelectorAll('.game-square')
@@ -140,7 +189,6 @@ const humanSquareChoice = () => {
     for (let i=0; i<gameSquare.length; i++) {
         gameSquare[i].addEventListener('click', squareClickHandler)
     }   
-    
 }
 
 const robotSquareChoice = () => {
@@ -174,15 +222,18 @@ const chooseFirstPlayer = () => {
     }
 }
 
-const forfeitGame = () => {
-    const startButton = document.getElementById('buttons-display')
-    startButton.createElement('button')
-    startButton.className = 'button'
-    startButton.id = 'start-button'
-    startButton.addEventListener('click', gameStart)
+const forfeitGameButton = () => {
+    const buttonDisplay = document.getElementById('buttons-display')
+    const forfeitButton = document.createElement('button')
+    forfeitButton.className = 'button'
+    forfeitButton.id = 'forfeit-button'
+    forfeitButton.innerText = 'Forfeit Game'
+    buttonDisplay.appendChild(forfeitButton)
+    forfeitButton.addEventListener('click', stageGame)
 }
 
 const createGameBoard = () => {
+    forfeitGameButton()
     //create divs with for loop
     for (let i=0; i<9; i++) {
         //populate emptySquares array
