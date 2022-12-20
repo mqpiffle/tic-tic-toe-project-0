@@ -93,6 +93,8 @@ stageGame = () => {
     availableSquares = []
     const element =  document.getElementById('continue-button')
     element.remove()
+    const gameGrid = document.getElementById('game-grid')
+    gameGrid.classList.remove('no-click')
     startButton()
 }
 
@@ -139,10 +141,10 @@ const checkForWin = (player) => {
             battleWinner()
         }
     }
-    if (turn === 10 && !didSomebodyWin) {
+    if (turn === 8 && !didSomebodyWin) {
         lockBoard()
         battleDraw()
-    } else if (turn < 10 && !didSomebodyWin) {
+    } else if (turn < 8 && !didSomebodyWin) {
         if (player === humanPlayer) {
             advanceTurn()
             currentPlayer = robotPlayer
